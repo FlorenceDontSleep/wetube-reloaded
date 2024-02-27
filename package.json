@@ -1,0 +1,26 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "My first NodeJs project",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://github.com/FlorenceDontSleep/wetube-reloaded)"
+  },
+  "author": "KHS",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "nodemon": "^3.0.3"
+  }
+}
