@@ -4,6 +4,6 @@ block content
     h4 Change Title of video
     //GET형식은 보통 검색
     //POST형식은 파일, DB값을 변경할 때, 로그인할 경우 사용
-    form(action="/save-changes",method="POST")
+    form(method="POST")
         input(name="title", placeholder="Video Title", value=video.title, required)
         input(value="Save", type="submit")

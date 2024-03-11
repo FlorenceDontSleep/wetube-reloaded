@@ -18,6 +18,8 @@ app.set("views", process.cwd() + "/src/views");
 //use를 get보다 먼저사용해야함
 //모든 route에서 use를 사용한다.
 app.use(logger);
+//express가 form의 value를 js object로 확인할수 있게함
+app.use(express.urlencoded( {extended: true} ));
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
