@@ -1,3 +1,5 @@
+//dbs파일 자체를 import함
+import "./db";
 import express from "express";
 import morgan from "morgan";
 import globalRouter from "./routers/globalRouter";
