@@ -15,7 +15,6 @@ const videoRouter = express.Router();
 videoRouter.get("/:id(\\d+)", watch);
 // GET request를 받으면 getEdit으로 보내고, POST request를 받으면 postEdit으로 보냄
 videoRouter.route("/:id(\\d+)/edit").get(getEdit).post(postEdit);
-
 videoRouter.route("/upload").get(getUpload).post(postUpload);
 
 

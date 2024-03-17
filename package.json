@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "My first NodeJs project",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js",
+    "dev": "nodemon --exec babel-node src/init.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
