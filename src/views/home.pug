@@ -2,7 +2,8 @@ extends base
 include mixins/video
 
 block content
-    each video in videos 
+    each video in videos
+        //mixin의 video.pug를 사용한다는 뜻(video.pug로 video object를 보내줌)
         +video(video)
     else
         li Sorry nothing found.

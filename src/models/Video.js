@@ -2,13 +2,15 @@ import mongoose from "mongoose";
 
 //데이터의 형식을 정의해줌
 const videoSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    createdAt: Date,
-    hashtags: [{ type: String }],
+    title: { type: String, required: true, trim: true, maxLength:80 },
+    description: { type: String, required: true, trim: true, minLength: 20 },
+    //Date.now()로 적지않는 이유는 ()가 있을경우 function이 즉시 실행된다.
+    //default를 설정해주면 controller에서 지정해주지 않아도 된다.
+    createdAt: { type: Date, required: true, default: Date.now },
+    hashtags: [{ type: String, trim: true }],
     meta: {
-        views: Number,
-        rating: Number,
+        views: { type: Number, default: 0, required: true},
+        rating: { type: Number, default: 0, required: true},
     },
 });
 
