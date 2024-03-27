@@ -5,6 +5,7 @@ import {
     getEdit, 
     postEdit,
     postUpload,
+    deleteVideo,
     
 } from "../controller/videoController"
 
@@ -17,6 +18,7 @@ const videoRouter = express.Router();
 videoRouter.get("/:id([0-9a-f]{24})", watch);
 // GET request를 받으면 getEdit으로 보내고, POST request를 받으면 postEdit으로 보냄
 videoRouter.route("/:id([0-9a-f]{24})/edit").get(getEdit).post(postEdit);
+videoRouter.route("/:id([0-9a-f]{24})/delete").get(deleteVideo);
 videoRouter.route("/upload").get(getUpload).post(postUpload);
 
 
