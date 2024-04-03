@@ -1,7 +1,8 @@
 //dbs파일 자체를 import함
 import "./db";
 //db 연결이 성공했을때 Video를 import함
-import Video from "./models/Video";
+import "./models/Video";
+import "./models/User";
 import app from "./server";
 
 //어플리케이션 작성

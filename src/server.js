@@ -1,7 +1,7 @@
 
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouter";
+import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 
@@ -20,7 +20,7 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 //express가 form의 value를 js object로 확인할수 있게함
 app.use(express.urlencoded( {extended: true} ));
-app.use("/", globalRouter);
+app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
 

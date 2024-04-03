@@ -86,6 +86,7 @@ export const search = async (req, res) => {
     if (keyword) {
         videos = await Video.find({
             title: {
+                //contain 방식의 regex 생성
                 $regex: new RegExp(keyword, "i")
             },
         })
