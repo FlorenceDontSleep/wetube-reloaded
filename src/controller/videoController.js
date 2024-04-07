@@ -29,7 +29,7 @@ export const getEdit = async (req, res) => {
     const { id } = req.params;
     const video = await Video.findById(id);
     if(!video) {
-        return res.render("404", { pageTitle: "Video not found." });
+        return res.status(404).render("404", { pageTitle: "Video not found." });
     }
     return res.render("edit", { pageTitle: `Edit ${video.title}`, video });
 }
@@ -41,7 +41,7 @@ export const postEdit = async (req, res) => {
     //video object를 받는대신 exists로 필터를 걸어서 true, false를 가져옴
     const video = await Video.exists({_id: id});
     if(!video) {
-        return res.render("404", { pageTitle: "Video not found." });
+        return res.status(404).render("404", { pageTitle: "Video not found." });
     }
     await Video.findByIdAndUpdate(id, {
         title,
@@ -67,10 +67,10 @@ export const postUpload = async (req, res) => {
         });
         return res.redirect("/");
     } catch(error) {
-        console.log(error);
-        return res.render("upload", { 
+        return res.status(400).render("upload", { 
             pageTitle: "Upload Video", 
-            errorMessage: error._message, });
+            errorMessage: error._message, 
+        });
     }
 };
 
