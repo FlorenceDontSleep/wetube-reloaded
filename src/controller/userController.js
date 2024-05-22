@@ -40,7 +40,7 @@ export const postJoin = async (req, res) => {
 
 };
 export const getLogin = (req, res) => 
-    res.send("Login", { pageTitle: "Login" });
+    res.render("Login", { pageTitle: "Login" });
 
 export const postLogin = async (req, res) => {
     const {username, password} = req.body;
@@ -60,7 +60,8 @@ export const postLogin = async (req, res) => {
             errorMessage: "Wrong password",
         });
     }
-    console.log("LOG USER IN! COMMING SOON!");
+    req.session.loggedIn = true;
+    req.session.user = user;
     return res.redirect("/");
 };
 export const edit = (req, res) => res.send("Edit User");

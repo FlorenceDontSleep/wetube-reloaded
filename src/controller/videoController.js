@@ -76,6 +76,7 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res) => {
     const { id } = req.param;
+    console.log(id);
     await Video.findByIdAndDelete(id);
     return res.redirect("/");
 };

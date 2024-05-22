@@ -1,9 +1,11 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
+import { localsMiddleware } from "./middlewares";
 
 const app = express();
 const logger = morgan("dev");
@@ -23,22 +25,14 @@ app.use(
     session({
     secret: "Hello!",
     resave: true,
-    saveUninitialized: true,
+    //세션을 수정 할 때에만 세션을 DB에 저장하고 쿠키를 설정
+    //로그인 했을 경우에만 세션을 부여
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl:"mongodb://127.0.0.1:27017/wetube"}),
     })
 );
 
-app.use((req, res, next) => {
-    req.sessionStore.all((error, sessions) => {
-        console.log(sessions);
-        next();
-    });
-});
-
-app.get("/add-one", (req, res, next) => {
-    req.session.potato += 1;
-    return res.send(`${req.session.id}\n${req.session.potato}`);
-})
-
+app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
