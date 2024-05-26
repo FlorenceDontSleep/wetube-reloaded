@@ -1,3 +1,4 @@
+import "dotenv/config";
 //dbs파일 자체를 import함
 import "./db";
 //db 연결이 성공했을때 Video를 import함

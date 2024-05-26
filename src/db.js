@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 * mongodb에 연결
 * useNewUrlParser 와 useUnifiedTopology는 Node.js 4.0.0 버전부턴 사용하지않음(효과가 없다)
 */ 
-mongoose.connect("mongodb://127.0.0.1:27017/wetube");
+mongoose.connect(process.env.DB_URL);
 
 const db = mongoose.connection;
 
