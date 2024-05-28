@@ -68,7 +68,7 @@ export const postLogin = async (req, res) => {
 export const startGitHubLogin = (req, res) => {
     const baseUrl = "https://github.com/login/oauth/authorize";
     const config = {
-        clientId: "Ov23lincCtn8H6eYA99F",
+        client_id: process.env.GH_CLIENT,
         allow_signup: false,
         scope: "read:user user:email",
     };
@@ -77,8 +77,55 @@ export const startGitHubLogin = (req, res) => {
     return res.redirect(finalUrl);
 };
 
-export const finishGitHubLogin = (req, res) => {
+export const finishGitHubLogin = async (req, res) => {
+    const baseUrl = "https://github.com/login/oauth/access_token";
+    const config = {
+        client_id: process.env.GH_CLIENT,
+        client_secret: process.env.GH_SECRET,
+        code: req.query.code,
+    };
+    const params = new URLSearchParams(config).toString();
+    const finalUrl = `${baseUrl}?${params}`;
+    //fetch를 통해 finalUrl에 POST요청을 보내고 데이터를 받아온다
+    const tokenRequest = await (
+        await fetch(finalUrl, {
+            method:"POST",
+            headers: {
+                Accept: "application/json",
+            },
+        })
+    ).json();
+    //access_token이 받아온 데이터 안에 있다면 github에서 fetch가 돌아오고 json으로 받음
+    if("access_token" in tokenRequest) {
+        const {access_token} = tokenRequest;
+        const apiUrl =  "https://api.github.com";
+        const userData = await (
+            await fetch(`${apiUrl}/user`, {
+                headers: {
+                    Authorization: `token ${access_token}`,
+                },
+            })
+        ).json();
 
+        const emailData = await (
+            await fetch(`${apiUrl}/user/emails`, {
+                headers: {
+                    Authorization: `token ${access_token}`,
+                },
+            })
+        ).json();
+        const email = emailData.find(
+            (email) => email.primary === true && email.verified === true
+        );
+        if(!email) {
+            res.redirect("/login");
+        }
+    }
+    else {
+        res.redirect("/login");
+    }
+
+    res.send(JSON.stringify(json));
 };
 
 export const edit = (req, res) => res.send("Edit User");
