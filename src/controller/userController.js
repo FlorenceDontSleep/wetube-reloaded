@@ -45,7 +45,7 @@ export const getLogin = (req, res) =>
 export const postLogin = async (req, res) => {
     const {username, password} = req.body;
     const pageTitle = "Login";
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username, socialOnly: false });
     if(!user) {
         return res.status(400).render("login", {
             pageTitle, 
@@ -114,12 +114,28 @@ export const finishGitHubLogin = async (req, res) => {
                 },
             })
         ).json();
-        const email = emailData.find(
-            (email) => email.primary === true && email.verified === true
+        const emailObj = emailData.find(
+            (emailObj) => email.primary === true && email.verified === true
         );
-        if(!email) {
+        if(!emailObj) {
             res.redirect("/login");
         }
+        //기존에 가입한 유저 중에 깃헙 이메일과 동일한 이메일을 사용하는 계정으로 로그인 시켜줌
+        let user = await User.findOne({email: emailObj.email});
+        //기존에 가입한 유저가 없다면 신규 가입 진행
+        if(!user) {
+            const user = await User.create({
+                name: userData.name,
+                username: userData.login,
+                email: emailObj.email,
+                password: "",
+                socialOnly: true,
+                location: userData.location,
+            });
+        } 
+        req.session.loggedIn = true;
+        req.session.user = user;
+        return res.redirect("/");
     }
     else {
         res.redirect("/login");
