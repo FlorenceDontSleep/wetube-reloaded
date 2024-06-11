@@ -84,6 +84,7 @@ export const finishGitHubLogin = async (req, res) => {
         client_secret: process.env.GH_SECRET,
         code: req.query.code,
     };
+    //URLSearchParams -> parameter들을 get형식으로 만들어줌
     const params = new URLSearchParams(config).toString();
     const finalUrl = `${baseUrl}?${params}`;
     //fetch를 통해 finalUrl에 POST요청을 보내고 데이터를 받아온다
@@ -115,7 +116,7 @@ export const finishGitHubLogin = async (req, res) => {
             })
         ).json();
         const emailObj = emailData.find(
-            (emailObj) => email.primary === true && email.verified === true
+            (email) => email.primary === true && email.verified === true
         );
         if(!emailObj) {
             res.redirect("/login");
@@ -125,6 +126,7 @@ export const finishGitHubLogin = async (req, res) => {
         //기존에 가입한 유저가 없다면 신규 가입 진행
         if(!user) {
             const user = await User.create({
+                avatarUrl:userData.avatar_url,
                 name: userData.name,
                 username: userData.login,
                 email: emailObj.email,
@@ -138,13 +140,19 @@ export const finishGitHubLogin = async (req, res) => {
         return res.redirect("/");
     }
     else {
-        res.redirect("/login");
+        return res.redirect("/login");
     }
-
-    res.send(JSON.stringify(json));
 };
 
-export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Remove User");
-export const logout = (req, res) => res.send("Log out");
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+};
+export const getEdit = (req, res) => {
+    return res.render("edit-profile", { pageTitle:"Edit Profile", });
+};
+export const postEdit = (req, res) => {
+    return res.render("edit-profile");
+};
+
 export const see = (req, res) => res.send("See User");
