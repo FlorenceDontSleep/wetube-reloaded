@@ -8,14 +8,19 @@ import {
     startGitHubLogin,
     finishGitHubLogin,
 } from "../controller/userController";
+import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
 
 const userRouter = express.Router();;
 
-userRouter.get("/logout", logout);
-userRouter.get("/edit", getEdit);
-userRouter.route("/edit").get(getEdit).post(postEdit);
-userRouter.get("/github/start", startGitHubLogin);
-userRouter.get("/github/finish", finishGitHubLogin);
+//로그인이 필요한 페이지에 들어갈때 middleware 실행
+userRouter.get("/logout", protectorMiddleware, logout);
+userRouter
+    .route("/edit")
+    .all(protectorMiddleware)
+    .get(getEdit)
+    .post(postEdit);
+userRouter.get("/github/start", publicOnlyMiddleware, startGitHubLogin);
+userRouter.get("/github/finish", publicOnlyMiddleware, finishGitHubLogin);
 userRouter.get(":id", see);
 
 export default userRouter;

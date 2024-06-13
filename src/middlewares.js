@@ -8,3 +8,21 @@ export const localsMiddleware = (req, res, next) => {
     //next가 없으면 페이지가 멈춤
     next();
 };
+
+export const protectorMiddleware = (req, res, next) => {
+    if(req.session.loggedIn) {
+        return next();
+    }
+    else {
+        return res.redirect("/login");
+    }
+};
+
+export const publicOnlyMiddleware = (req, res, next) => {
+    if(!req.session.loggedIn) {
+        return next();
+    }
+    else {
+        return res.redirect("/");
+    }
+}
