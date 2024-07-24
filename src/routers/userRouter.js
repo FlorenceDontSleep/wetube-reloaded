@@ -7,10 +7,12 @@ import {
     see, 
     startGitHubLogin,
     finishGitHubLogin,
+    getChangePassword,
+    postChangePassword,
 } from "../controller/userController";
 import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
 
-const userRouter = express.Router();;
+const userRouter = express.Router();
 
 //로그인이 필요한 페이지에 들어갈때 middleware 실행
 userRouter.get("/logout", protectorMiddleware, logout);
@@ -19,6 +21,7 @@ userRouter
     .all(protectorMiddleware)
     .get(getEdit)
     .post(postEdit);
+userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
 userRouter.get("/github/start", publicOnlyMiddleware, startGitHubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGitHubLogin);
 userRouter.get(":id", see);

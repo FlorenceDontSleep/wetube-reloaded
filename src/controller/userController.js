@@ -11,7 +11,8 @@ export const postJoin = async (req, res) => {
             errorMessage: "Password confirmation does not match.",
         });
     }
-    //exist -> 중복체크
+    // exist -> 중복체크
+    // $or -> 하나 이상의 조건을 충족시 true 반환
     const exists = await User.exists({ $or: [{ username }, { email }] });
     if(exists) {
         // 기본적으로 status를 설정해두지 않으면 200(성공)으로 서버에서 처리하기 때문에
@@ -148,24 +149,60 @@ export const logout = (req, res) => {
     req.session.destroy();
     return res.redirect("/");
 };
+
 export const getEdit = (req, res) => {
     return res.render("edit-profile", { pageTitle:"Edit Profile", });
 };
+
 export const postEdit = async (req, res) => {
-    //req.body -> form에서 받아온 데이터
+    // req.body -> form에서 받아온 데이터
     const { 
         session: {
-            user: { _id }, 
+            user: { _id, avatarUrl, email: currentEmail, username: currentUsername }, 
         },
         body: { name, email, username, location },
     } = req;
-    await User.findByIdAndUpdate(_id, {
+    let searchParam = [];
+    // 이메일 이나 유저네임 중 변경한 것만 검색용 파라메터에 넣어줌
+    console.log(currentUsername);
+    console.log(username);
+    if(currentEmail !== email) {
+        searchParam.push( { email } );
+    }
+    if(currentUsername !== username) {
+        
+        searchParam.push( { username } );
+    }
+    // 검색용 파라메터 안에 내용이 존재할 경우
+    if(searchParam.length > 0) {
+        console.log("파라메터 크기 0 보다 큼");
+        const searchUserData = await User.findOne( { $or : searchParam } );
+        if( searchUserData && searchUserData._id.toString() !== _id ) {
+            return res.status(400).render("edit-profile", {
+                pageTitle : "Edit Profile",
+                errorMessage : "Sorry, This Email or Username is already taken.",
+            })
+        }
+    }
+    const updatedUser = await User.findByIdAndUpdate(_id, {
         name,
         email,
         username,
         location,
-    });
-    return res.render("edit-profile");
+     },
+     { new : true },
+    );
+    req.session.user = updatedUser;
+    return res.redirect("/users/edit");
 };
+
+export const getChangePassword = (req, res) => {
+    return res.render("users/change-password", { pageTitle: "Change Password" } );
+}
+
+export const postChangePassword = (req, res) => {
+    // 알람 전송
+    return res.redirect("/");
+}
 
 export const see = (req, res) => res.send("See User");

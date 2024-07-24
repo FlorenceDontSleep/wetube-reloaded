@@ -1,6 +1,8 @@
 extends base
 
 block content
+    if errorMessage
+        span=errorMessage
     //form 에 action이 없다면 현재 url로 post request를 보냄
     form(method="POST")
         input(placeholder="Name" ,name="name", type="text", required, value=loggedInUser.name)
@@ -8,3 +10,6 @@ block content
         input(placeholder="Username" ,name="username", type="text", required, value=loggedInUser.username)
         input(placeholder="Location" ,name="location", type="text", required, value=loggedInUser.location)
         input(type="submit", value="Update Profile")
+        if !loggedInUser.socialOnly
+            hr
+            a(href="change-password") Change Password &rarr;
