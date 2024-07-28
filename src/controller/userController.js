@@ -161,7 +161,9 @@ export const postEdit = async (req, res) => {
             user: { _id, avatarUrl, email: currentEmail, username: currentUsername }, 
         },
         body: { name, email, username, location },
+        file,
     } = req;
+    console.log(file);
     let searchParam = [];
     // 이메일 이나 유저네임 중 변경한 것만 검색용 파라메터에 넣어줌
     console.log(currentUsername);

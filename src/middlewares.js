@@ -1,3 +1,5 @@
+import multer from "multer"
+
 export const localsMiddleware = (req, res, next) => {
     //locals는 자동적으로 view에 import 되어있음
     res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -25,4 +27,8 @@ export const publicOnlyMiddleware = (req, res, next) => {
     else {
         return res.redirect("/");
     }
-}
+};
+
+export const  uploadFiles = multer({
+    dest: "uploads/"
+});
