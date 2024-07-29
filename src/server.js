@@ -33,6 +33,8 @@ app.use(
 );
 
 app.use(localsMiddleware);
+// static 설정을 해줘야 브라우저에서 해당 폴더의 파일을 확인할 수 있다
+app.use("/uploads", express.static("uploads"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

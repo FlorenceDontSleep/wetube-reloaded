@@ -20,6 +20,8 @@ userRouter
     .route("/edit")
     .all(protectorMiddleware)
     .get(getEdit)
+    // multer로 파일의 정보를 받아 postEdit으로 전달해줌
+    // single : 단일 파일 업로드용
     .post(uploadFiles.single("avatar"), postEdit);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
 userRouter.get("/github/start", publicOnlyMiddleware, startGitHubLogin);

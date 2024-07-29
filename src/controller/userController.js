@@ -163,7 +163,7 @@ export const postEdit = async (req, res) => {
         body: { name, email, username, location },
         file,
     } = req;
-    console.log(file);
+
     let searchParam = [];
     // 이메일 이나 유저네임 중 변경한 것만 검색용 파라메터에 넣어줌
     console.log(currentUsername);
@@ -186,13 +186,18 @@ export const postEdit = async (req, res) => {
             })
         }
     }
-    const updatedUser = await User.findByIdAndUpdate(_id, {
-        name,
-        email,
-        username,
-        location,
-     },
-     { new : true },
+    const updatedUser = await User.findByIdAndUpdate(
+        _id, 
+        {
+            // file 첨부를 해서 req 안에 file 이 있다면 file의 주소를 넣어주고, 
+            // file 첨부하지 않았다면 session(loggedInUser)에 있는 avatarUrl를 넣어준다
+            avatarUrl: file ? file.path : avatarUrl,
+            name,
+            email,
+            username,
+            location,
+        },
+    { new : true },
     );
     req.session.user = updatedUser;
     return res.redirect("/users/edit");
