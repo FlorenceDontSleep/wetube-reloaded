@@ -30,8 +30,18 @@ export const publicOnlyMiddleware = (req, res, next) => {
 };
 
 // 파일을 업로드할 때 사용하는 패키지 multer
-export const  uploadFiles = multer({
-    dest: "uploads/"
+export const avatarUpload = multer({ 
+    dest: "uploads/avatars/",
+    limits: {
+        fileSize: 3000000,
+    }
+});
+
+export const videoUpload = multer({ 
+    dest: "uploads/videos/",
+    limits: {
+        fileSize: 409715200,
+    },
 });
 
 // 브라우저에서 서버의 모든 폴더를 확인할 수 있다면 보안에 문제가 있기 때문에 제한해줌

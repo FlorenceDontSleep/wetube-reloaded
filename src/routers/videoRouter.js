@@ -8,7 +8,7 @@ import {
     deleteVideo,
     
 } from "../controller/videoController"
-import { protectorMiddleware } from "../middlewares";
+import { protectorMiddleware, videoUpload } from "../middlewares";
 
 const videoRouter = express.Router();
 
@@ -20,7 +20,8 @@ videoRouter.get("/:id([0-9a-f]{24})", watch);
 // GET request를 받으면 getEdit으로 보내고, POST request를 받으면 postEdit으로 보냄
 videoRouter.route("/:id([0-9a-f]{24})/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
 videoRouter.route("/:id([0-9a-f]{24})/delete").all(protectorMiddleware).get(deleteVideo);
-videoRouter.route("/upload").all(protectorMiddleware).get(getUpload).post(postUpload);
+// multer를 사용하기 위해, view의 input의 name을 가져와서 사용해줌
+videoRouter.route("/upload").all(protectorMiddleware).get(getUpload).post(videoUpload.single("video"), postUpload);
 
 
 export default videoRouter;

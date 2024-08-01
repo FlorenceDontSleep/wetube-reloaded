@@ -56,6 +56,7 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+    const { path: fileUrl } = req.file;
     const { title, description, hashtags } = req.body;
     // await 는 명령이 끝나기 전까지 밑의 줄을 실행하지 않음
     // (promise)
@@ -63,6 +64,7 @@ export const postUpload = async (req, res) => {
         await Video.create({
             title,
             description,
+            fileUrl,
             hashtags: Video.formatHashtags(hashtags),
         });
         return res.redirect("/");

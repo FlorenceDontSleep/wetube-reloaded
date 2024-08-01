@@ -10,7 +10,7 @@ import {
     getChangePassword,
     postChangePassword,
 } from "../controller/userController";
-import { protectorMiddleware, publicOnlyMiddleware, uploadFiles } from "../middlewares";
+import { avatarUpload, protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
 
 const userRouter = express.Router();
 
@@ -22,7 +22,7 @@ userRouter
     .get(getEdit)
     // multer로 파일의 정보를 받아 postEdit으로 전달해줌
     // single : 단일 파일 업로드용
-    .post(uploadFiles.single("avatar"), postEdit);
+    .post(avatarUpload.single("avatar"), postEdit);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
 userRouter.get("/github/start", publicOnlyMiddleware, startGitHubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGitHubLogin);
