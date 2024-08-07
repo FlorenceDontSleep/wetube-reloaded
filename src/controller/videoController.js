@@ -1,4 +1,5 @@
 import Video from "../models/Video";
+import User from "../models/User";
 //callback -> 무언가 발생하고 난 뒤 호출되는 function
 //현재 mongoose는 callback을 지원하지 않고 무조건 promise를 사용해야한다
 
@@ -19,10 +20,11 @@ export const watch = async (req, res) => {
     //const id = req.params.id;
     const { id } = req.params;
     const video = await Video.findById(id);
+    const owner = await User.findById(video.owner);
     if(!video) {
         return res.render("404", { pageTitle: "Video not found." });
     }
-    return res.render("watch", { pageTitle : video.title, video });
+    return res.render("watch", { pageTitle : video.title, video, owner });
 }
 
 export const getEdit = async (req, res) => {
@@ -56,6 +58,9 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+    const { 
+        user: { _id },
+    } = req.session;
     const { path: fileUrl } = req.file;
     const { title, description, hashtags } = req.body;
     // await 는 명령이 끝나기 전까지 밑의 줄을 실행하지 않음
@@ -65,6 +70,7 @@ export const postUpload = async (req, res) => {
             title,
             description,
             fileUrl,
+            owner: _id,
             hashtags: Video.formatHashtags(hashtags),
         });
         return res.redirect("/");

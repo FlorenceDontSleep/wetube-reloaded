@@ -13,6 +13,10 @@ const videoSchema = new mongoose.Schema({
         views: { type: Number, default: 0, required: true},
         rating: { type: Number, default: 0, required: true},
     },
+    // ObjectId는 js의 데이터 형식이 아닌 mongoose의 형식이기 때문에 밑의 코드와 같이 선언해줘야 작동한다.
+    // owner에 무엇을 저장해줘야하는지 지정해줘야 한다.
+    // 지정해줄때는 ref를 사용해서 지정해준다. (model User에서 온다고 지정해줌)
+    owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
 
 videoSchema.static('formatHashtags', function(hashtags) {

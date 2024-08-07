@@ -24,8 +24,10 @@ userRouter
     // single : 단일 파일 업로드용
     .post(avatarUpload.single("avatar"), postEdit);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
+
 userRouter.get("/github/start", publicOnlyMiddleware, startGitHubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGitHubLogin);
-userRouter.get(":id", see);
+
+userRouter.get("/:id", see);
 
 export default userRouter;
