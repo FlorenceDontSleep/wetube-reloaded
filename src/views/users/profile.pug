@@ -1,4 +1,9 @@
 extends ../base
+include ../mixins/video
 
 block content
-    h1 hello
+    each video in user.videos
+        //mixin의 video.pug를 사용한다는 뜻(video.pug로 video object를 보내줌)
+        +video(video)
+    else
+        li Sorry nothing found.

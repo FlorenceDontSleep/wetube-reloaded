@@ -17,14 +17,15 @@ export const home = async (req, res) => {
 }
 
 export const watch = async (req, res) => {
-    //const id = req.params.id;
+    // const id = req.params.id;
     const { id } = req.params;
-    const video = await Video.findById(id);
-    const owner = await User.findById(video.owner);
+    // populate로 owner의 내용을 모두가져온다. owner는 videoschema에서 User 형식이라고 설정해줌
+    const video = await Video.findById(id).populate("owner");
+    console.log(video);
     if(!video) {
         return res.render("404", { pageTitle: "Video not found." });
     }
-    return res.render("watch", { pageTitle : video.title, video, owner });
+    return res.render("watch", { pageTitle : video.title, video });
 }
 
 export const getEdit = async (req, res) => {
@@ -66,13 +67,16 @@ export const postUpload = async (req, res) => {
     // await 는 명령이 끝나기 전까지 밑의 줄을 실행하지 않음
     // (promise)
     try {
-        await Video.create({
+        const newVideo = await Video.create({
             title,
             description,
             fileUrl,
             owner: _id,
             hashtags: Video.formatHashtags(hashtags),
         });
+        const user = await User.findById(_id);
+        user.videos.push(newVideo._id);
+        user.save();
         return res.redirect("/");
     } catch(error) {
         return res.status(400).render("upload", { 
