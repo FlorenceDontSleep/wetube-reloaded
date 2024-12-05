@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "My first NodeJs project",
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js",
-    "assets": "webpack --config webpack.config.js",
+    "dev:server": "nodemon",
+    "dev:assets": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,6 +14,8 @@
   "author": "KHS",
   "license": "MIT",
   "dependencies": {
+    "@ffmpeg/core": "^0.12.6",
+    "@ffmpeg/ffmpeg": "^0.12.10",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.5",

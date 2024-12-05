@@ -243,7 +243,16 @@ export const postChangePassword = async (req, res) => {
 export const see = async (req, res) => {
     // get형식이기 때문에 params에서 가져온다
     const {id} = req.params;
-    const user = await User.findById(id).populate("videos");
+    // User를 DB에서 가져온 뒤, User의 videos를 가져옴
+    const user = await User.findById(id).populate({
+        // 먼저 내가 populate 하고 싶은 것을 선언
+        path: "videos",
+        // 그 이후 가져올 데이터를 한번 더 populate 해줌
+        populate: {
+            path: "owner",
+            model: "User",
+        },
+    });
     if(!user) {
         return res.status(404).render("404", { pageTitle: "User not found." });
     }

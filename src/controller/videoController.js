@@ -9,7 +9,9 @@ export const home = async (req, res) => {
         // videos 는 doc의 이름(출력할 object의 이름)
         // await를 find 앞에 적으면 fin는 callback을 필요하지 않다고 인식
         // await는 DB를 기다려줌(무조건 위에서 아래 순서로 출력)
-        const videos = await Video.find({}).sort({ createdAt: "desc" });
+        const videos = await Video.find({})
+            .sort({ createdAt: "desc" })
+            .populate("owner");
         res.render("home", { pageTitle: "Home", videos });
     } catch {
         return res.render("server-error");
@@ -125,7 +127,20 @@ export const search = async (req, res) => {
                 //contain 방식의 regex 생성
                 $regex: new RegExp(keyword, "i")
             },
-        })
+        }).populate("owner");
     }
     return res.render("search", {pageTitle: "Search", videos });
-}
+};
+
+export const registerView = async (req, res) => {
+    const { id } = req.params;
+    const video = await Video.findById(id);
+    if(!video) {
+        // status는 render 전에 상태 코드를 설정해주는 것
+        // sendStatus는 상태코드를 보내고 연결을 끊내는 것임
+        return res.sendStatus(404);
+    }
+    video.meta.views = video.meta.views + 1;
+    await video.save();
+    return res.sendStatus(200);
+};

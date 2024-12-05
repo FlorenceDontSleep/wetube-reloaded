@@ -2,8 +2,12 @@ extends ../base
 include ../mixins/video
 
 block content
-    each video in user.videos
-        //mixin의 video.pug를 사용한다는 뜻(video.pug로 video object를 보내줌)
-        +video(video)
-    else
-        li Sorry nothing found.
+    div.profile__data
+        img(src="/" + user.avatarUrl).avatar
+        h3=user.name
+    div.video-grid
+        each video in user.videos
+            //mixin의 video.pug를 사용한다는 뜻(video.pug로 video object를 보내줌)
+            +video(video)
+        else
+            span.empty__message No videos found

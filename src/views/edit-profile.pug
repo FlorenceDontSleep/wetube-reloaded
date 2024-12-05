@@ -2,11 +2,11 @@ extends base
 
 block content
     //if loggedInUser.avatarUrl = undefined
-    img(src="/" + loggedInUser.avatarUrl, width="100", height="100")
+    //img(src="/" + loggedInUser.avatarUrl, width="100", height="100")
     if errorMessage
         span=errorMessage
     //form 에 action이 없다면 현재 url로 post request를 보냄
-    form(method="POST", enctype="multipart/form-data")
+    form(method="POST", enctype="multipart/form-data").edit-profile__form
         label(for="avatar") Avatar
         input(type="file", id="avatar", name="avatar", accept="*/image")
         input(placeholder="Name" ,name="name", type="text", required, value=loggedInUser.name)
@@ -15,5 +15,5 @@ block content
         input(placeholder="Location" ,name="location", type="text", required, value=loggedInUser.location)
         input(type="submit", value="Update Profile")
         if !loggedInUser.socialOnly
-            hr
-            a(href="change-password") Change Password &rarr;
+            div.edit-profile__password
+                a(href="change-password") Change Password &rarr;
